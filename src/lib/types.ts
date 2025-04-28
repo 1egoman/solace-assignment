@@ -4,7 +4,7 @@ export type Advocate = {
   lastName: string;
   city: string;
   degree: string;
-  phoneNumber: number;
+  phoneNumber: string;
   createdAt: Date | null;
   specialties: Array<string>;
   yearsOfExperience: number;
