@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { like, or } from "drizzle-orm";
+import { ilike, or } from "drizzle-orm";
 
 import { Advocate } from "@/lib/types";
 import db from "@/db";
@@ -28,8 +28,8 @@ export async function GET(req: NextRequest) {
       or(
         // NOTE: there's probably a more robust way to do this using some sort of postgres full
         // text search api, but this is definitely an improvement over the previous state of affairs
-        like(advocates.firstName, `%${searchText}%`),
-        like(advocates.lastName, `%${searchText}%`),
+        ilike(advocates.firstName, `%${searchText}%`),
+        ilike(advocates.lastName, `%${searchText}%`),
         // TODO: apply search to more columns with more complex datatypes like `specialties`
       )
     )
