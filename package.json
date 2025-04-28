@@ -13,7 +13,9 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.74.7",
+    "@types/lodash.debounce": "^4.0.9",
     "drizzle-orm": "^0.32.1",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.503.0",
     "next": "^14.2.19",
     "postgres": "^3.4.4",
