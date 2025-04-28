@@ -58,7 +58,7 @@ export default function Home() {
 
       <div className="flex justify-center overflow-auto">
         <div className="flex flex-col items-center w-full max-w-[1200px] px-2">
-          <div className="flex justify-end items-center w-full h-10">
+          <div className="flex justify-end items-center w-full h-10 border-b grow-0 shrink-0">
             {/* FIXME: replace the below input with a shadcn component or something similar */}
             <input
               style={{ border: "1px solid black" }}
