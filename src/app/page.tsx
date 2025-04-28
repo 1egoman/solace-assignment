@@ -1,91 +1,92 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import { Advocate } from "@/lib/types";
+import { useQuery } from "@tanstack/react-query";
+import { LoaderIcon } from "lucide-react";
 
 export default function Home() {
-  const [advocates, setAdvocates] = useState([]);
-  const [filteredAdvocates, setFilteredAdvocates] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const { status, data } = useQuery({
+    queryKey: ['advocates', searchText],
+    queryFn: async () => {
+      const response = await fetch(`/api/advocates?search=${searchText}`);
+      if (!response.ok) {
+        throw new Error(`Error fetching advocates: received ${response.status} ${await response.text()}`);
+      }
 
-  useEffect(() => {
-    console.log("fetching advocates...");
-    fetch("/api/advocates").then((response) => {
-      response.json().then((jsonResponse) => {
-        setAdvocates(jsonResponse.data);
-        setFilteredAdvocates(jsonResponse.data);
-      });
-    });
+      const body: { data: Array<Advocate> } = await response.json();
+      return body.data;
+    },
+  });
+
+  const onSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.currentTarget.value);
   }, []);
 
-  const onChange = (e) => {
-    const searchTerm = e.target.value;
+  const onResetSearch = useCallback(() => {
+    setSearchText('');
+  }, []);
 
-    document.getElementById("search-term").innerHTML = searchTerm;
-
-    console.log("filtering advocates...");
-    const filteredAdvocates = advocates.filter((advocate) => {
+  switch (status) {
+    case 'pending':
       return (
-        advocate.firstName.includes(searchTerm) ||
-        advocate.lastName.includes(searchTerm) ||
-        advocate.city.includes(searchTerm) ||
-        advocate.degree.includes(searchTerm) ||
-        advocate.specialties.includes(searchTerm) ||
-        advocate.yearsOfExperience.includes(searchTerm)
+        <div>
+          <LoaderIcon size={32} className="animate-spin" />
+        </div>
       );
-    });
 
-    setFilteredAdvocates(filteredAdvocates);
-  };
+    case 'error':
+      return (
+        <div>
+          <span className="text-red-500">Error loading advocates!</span>
+        </div>
+      );
 
-  const onClick = () => {
-    console.log(advocates);
-    setFilteredAdvocates(advocates);
-  };
-
-  return (
-    <main style={{ margin: "24px" }}>
-      <h1>Solace Advocates</h1>
-      <br />
-      <br />
-      <div>
-        <p>Search</p>
-        <p>
-          Searching for: <span id="search-term"></span>
-        </p>
-        <input style={{ border: "1px solid black" }} onChange={onChange} />
-        <button onClick={onClick}>Reset Search</button>
-      </div>
-      <br />
-      <br />
-      <table>
-        <thead>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>City</th>
-          <th>Degree</th>
-          <th>Specialties</th>
-          <th>Years of Experience</th>
-          <th>Phone Number</th>
-        </thead>
-        <tbody>
-          {filteredAdvocates.map((advocate) => {
-            return (
-              <tr>
-                <td>{advocate.firstName}</td>
-                <td>{advocate.lastName}</td>
-                <td>{advocate.city}</td>
-                <td>{advocate.degree}</td>
-                <td>
-                  {advocate.specialties.map((s) => (
-                    <div>{s}</div>
-                  ))}
-                </td>
-                <td>{advocate.yearsOfExperience}</td>
-                <td>{advocate.phoneNumber}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </main>
-  );
+    case 'success':
+      return (
+        <main style={{ margin: "24px" }}>
+          <h1>Solace Advocates</h1>
+          <br />
+          <br />
+          <div>
+            <p>Search</p>
+            <input style={{ border: "1px solid black" }} value={searchText} onChange={onSearchChange} />
+            <button onClick={onResetSearch}>Reset Search</button>
+          </div>
+          <br />
+          <br />
+          <table>
+            <thead>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>City</th>
+              <th>Degree</th>
+              <th>Specialties</th>
+              <th>Years of Experience</th>
+              <th>Phone Number</th>
+            </thead>
+            <tbody>
+              {data.map((advocate) => {
+                return (
+                  <tr>
+                    <td>{advocate.firstName}</td>
+                    <td>{advocate.lastName}</td>
+                    <td>{advocate.city}</td>
+                    <td>{advocate.degree}</td>
+                    <td>
+                      {advocate.specialties.map((s) => (
+                        <div>{s}</div>
+                      ))}
+                    </td>
+                    <td>{advocate.yearsOfExperience}</td>
+                    <td>{advocate.phoneNumber}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </main>
+      );
+  }
 }
