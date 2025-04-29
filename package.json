@@ -12,11 +12,17 @@
     "seed": "node --loader esbuild-register/loader -r esbuild-register ./src/db/seed/index.ts"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.74.7",
+    "@types/lodash.debounce": "^4.0.9",
+    "clsx": "^2.1.1",
     "drizzle-orm": "^0.32.1",
+    "lodash.debounce": "^4.0.8",
+    "lucide-react": "^0.503.0",
     "next": "^14.2.19",
     "postgres": "^3.4.4",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "tailwind-merge": "^3.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.14.12",
