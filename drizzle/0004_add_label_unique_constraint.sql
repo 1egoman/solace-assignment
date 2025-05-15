@@ -1,0 +1,1 @@
+ALTER TABLE "specialties" ADD CONSTRAINT "specialties_label_unique" UNIQUE("label");

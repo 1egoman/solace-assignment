@@ -21,4 +21,9 @@ const advocates = pgTable("advocates", {
   createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
-export { advocates };
+const specialties = pgTable("specialties", {
+  id: serial("id").primaryKey(),
+  label: text("label").notNull().unique(),
+});
+
+export { advocates, specialties };

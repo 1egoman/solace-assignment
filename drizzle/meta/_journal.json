@@ -22,6 +22,27 @@
       "when": 1745867463761,
       "tag": "0002_migrate_phone_number_to_text",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1746039025478,
+      "tag": "0003_add_specialities_table",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1746039810577,
+      "tag": "0004_add_label_unique_constraint",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1746039840572,
+      "tag": "0005_migrate_specialities_to_dedicated_table",
+      "breakpoints": true
     }
   ]
 }
